@@ -17,4 +17,4 @@ spring:
     activate:
       on-profile: prod
 
-api-gateway-url: http://13.124.121.251:8081
+api-gateway-url: http://13.124.17.116:8081
