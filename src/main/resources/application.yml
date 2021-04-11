@@ -1,1 +1,20 @@
+# 로컬 환경에서 사용시 local 을 프로파일로 지정해 사용해야 정상동작함
+
+
+# 로컬 개발용
+spring:
+  config:
+    activate:
+      on-profile: local
+
 api-gateway-url: http://localhost:8081
+
+---
+
+# 운영서버 배포용
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+api-gateway-url: http://13.124.121.251:8081
