@@ -15,4 +15,7 @@ public class WebController {
     public String error(){
         return "error";
     }
+
+    @GetMapping("/test")
+    public String test() { return "test"; }
 }
