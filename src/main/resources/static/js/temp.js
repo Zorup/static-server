@@ -8,7 +8,7 @@ const initData = {
     postData: "",
 }
 
-let userAjax = (prev) => {   // 유저정보 요청
+const userAjax = (prev) => {   // 유저정보 요청
     return $.ajax({
         url: `${window.API_GATEWAY_URI}/main/v1/user-info`,
         type: 'GET',
@@ -22,7 +22,7 @@ let userAjax = (prev) => {   // 유저정보 요청
     });
 }
 
-let forumAjax = (prev) => {  // 포럼 리스트와 기본포럼 정보 요청
+const forumAjax = (prev) => {  // 포럼 리스트와 기본포럼 정보 요청
     return $.ajax({
         url: `${window.API_GATEWAY_URI}/main/v1/forum`,
         type: 'GET',
@@ -36,7 +36,7 @@ let forumAjax = (prev) => {  // 포럼 리스트와 기본포럼 정보 요청
     });
 }
 
-let postAjax = (prev) => {   // 기본포럼의 피드정보 요청, forumAjax()에 의존적
+const postAjax = (prev) => {   // 기본포럼의 피드정보 요청, forumAjax()에 의존적
     const forumId = prev.defaultForum.forumId;
     return $.ajax({
         url: `${window.API_GATEWAY_URI}/main/v1/forum/${forumId}/postview`,
@@ -51,24 +51,30 @@ let postAjax = (prev) => {   // 기본포럼의 피드정보 요청, forumAjax()
     });
 }
 
-let drawForum = () => { // 포럼리스트 그리는 모듈
-    let source = document.querySelector("#forum-button").innerText;
+const drawForum = () => { // 포럼리스트 그리는 모듈
+    const source = document.querySelector("#forum-button").innerText;
     let template = Handlebars.compile(source);
-    let wrapper = {
+    const wrapper = {
         forumList: initData.forumData.forumList
     };
     let result = template(wrapper);
     document.querySelector(".nav-item > .forum-list").innerHTML = result;
 }
 
-let initDraw = () => {   // 초기데이터로 화면 그리는 function
+const drawUser = () => {    // 유저프로필 채우는 모듈
+    const userProfile = document.querySelector("#content .navbar-nav #userDropdown span");
+    userProfile.innerText = initData.userData.data.name;
+}
+
+const initDraw = () => {   // 초기데이터로 화면 그리는 function
     // console.log("user data: ", initData.userData);
     // console.log("forum data: ", initData.forumData);
     // console.log("post data: ", initData.postData);
     drawForum();
+    drawUser();
 }
 
-function initAjax(){    // 초기데이터 불러오고 화면그리기
+const initAjax = () => {    // 초기데이터 불러오고 화면그리는 function
     userAjax();
     forumAjax().then(postAjax).done(initDraw);   // forumAjax 응답받은 후 응답데이터 이용해 postAjax 요청
 }
