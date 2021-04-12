@@ -10,46 +10,21 @@
 
     <title>그룹웨어 MVP</title>
     <!-- Custom fonts for this template-->
-    <link href="/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="/css/index.css" rel="stylesheet">
 
 </head>
 
 <body id="page-top">
 
     <script type="text/javascript" th:inline="javascript">
-
-        const API_GATEWAY_URI = [[ ${@environment.getProperty('api-gateway-url')} ]] ;  //  from application.yml
-
-        const syncAjax = function(obj){
-            let xhr = new XMLHttpRequest();
-            const url = `${API_GATEWAY_URI}/main/v1/post`;
-
-            xhr.addEventListener("load", function(){
-                const status = xhr.status;
-                if (status != 200){ //  if fail
-                    console.log(`ajax failed with status code: ${xhr.status}`);
-                    location.href = "/error";
-                }
-
-                // on success
-                let json = xhr.response;
-                obj.data = JSON.parse(json);
-            });
-
-            xhr.open("GET", url, false);    // synchronous
-            xhr.send(null);
-        }
-
-        const dataWrapper = { data: null };
-        syncAjax(dataWrapper);
-        const postList = dataWrapper.data;
-
+        window.API_GATEWAY_URI = [[ ${@environment.getProperty('api-gateway-url')} ]] ;  //  from application.yml
     </script>
 
 
@@ -63,58 +38,22 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">그룹웨어 <sup>1</sup></div>
+                <div class="sidebar-brand-text mx-3">[차후 그룹명 입력] <sup>1</sup></div>
             </a>
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="temp.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
-
             <!-- Divider -->
             <hr class="sidebar-divider">
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Interface
+                소그룹
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
+            <li class="nav-item" >
+                <div class="forum-list">
                 </div>
             </li>
 
@@ -123,42 +62,22 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Addons
+                소그릅 관리
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
+                   aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>설정</span>
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="index_test.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                    <div class="bg-white py-2 collapse-inner rounded" >
+                        <button class="custom-collapse-item abtn" data-toggle="modal" data-target="#subGroup">소그룹 추가</button>
+                        <button class="custom-collapse-item abtn" data-toggle="modal" data-target="#deleteSmallGroup">소그룹 삭제</button>
                     </div>
                 </div>
-            </li>
-
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-            </li>
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
             </li>
 
             <!-- Divider -->
@@ -189,10 +108,10 @@
 
                     <!-- Topbar Search -->
                     <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                            class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
                             <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
+                                   aria-label="Search" aria-describedby="basic-addon2">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="button">
                                     <i class="fas fa-search fa-sm"></i>
@@ -207,17 +126,17 @@
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
                             <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-search fa-fw"></i>
                             </a>
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
+                                 aria-labelledby="searchDropdown">
                                 <form class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
                                         <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
+                                               placeholder="Search for..." aria-label="Search"
+                                               aria-describedby="basic-addon2">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" type="button">
                                                 <i class="fas fa-search fa-sm"></i>
@@ -231,14 +150,14 @@
                         <!-- Nav Item - Alerts -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <!-- Counter - Alerts -->
                                 <span class="badge badge-danger badge-counter">3+</span>
                             </a>
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
+                                 aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">
                                     Alerts Center
                                 </h6>
@@ -282,21 +201,21 @@
                         <!-- Nav Item - Messages -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
                                 <!-- Counter - Messages -->
                                 <span class="badge badge-danger badge-counter">7</span>
                             </a>
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="messagesDropdown">
+                                 aria-labelledby="messagesDropdown">
                                 <h6 class="dropdown-header">
                                     Message Center
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
-                                            alt="">
+                                        <img class="rounded-circle" src="/img/undraw_profile_1.svg"
+                                             alt="">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div class="font-weight-bold">
@@ -307,8 +226,8 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
-                                            alt="">
+                                        <img class="rounded-circle" src="/img/undraw_profile_2.svg"
+                                             alt="">
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
@@ -319,8 +238,8 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
-                                            alt="">
+                                        <img class="rounded-circle" src="/img/undraw_profile_3.svg"
+                                             alt="">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
@@ -332,7 +251,7 @@
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
                                         <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                            alt="">
+                                             alt="">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div>
@@ -347,17 +266,19 @@
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 
-                        <!-- Nav Item - User Information -->
+                        <!-- Nav Item - User Information 유저정보 맵핑-->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">김한성</span>
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">사용자 이름</span>
+<!--                                수정할곳 -->
+<!--                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text = "${user.name}">사용자 이름</span>-->
                                 <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                     src="/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
+                                 aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
@@ -384,30 +305,105 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- 여기서 부터 시작-->
-                    <div class="container" th:each = "postList,index:${postList}">
+                    <!-- 게시글 생성 -->
+                    <div class="container">
                         <div class="d-flex  row">
                             <div class="col-md-7">
                                 <div class="d-flex flex-column comment-section">
                                     <div class="bg-white p-2">
-                                        <div class="d-flex flex-row user-info"><img class="rounded-circle" src="img/undraw_profile.svg" width="60" height="60">
+                                        <div class="d-flex flex-row user-info"><img class="rounded-circle" src="/img/undraw_profile.svg" width="30" height="30">
+                                            <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name">김한성</span></div>
+<!--                                            수정할곳 -->
+<!--                                            <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name" th:text = "${user.name}">김한성</span></div>-->
+                                        </div>
+                                        <form style="margin-top: 10px"action="/v1/web/post" method="post">
+                                            <div class="d-flex flex-row align-items-start">
+                                                <input name='userId' style="display: none">
+                                                <input name='forumId' style="display: none">
+<!--                                                수정할곳 -->
+<!--                                                <input name='userId' th:value="${user.userId}" style="display: none">-->
+<!--                                                <input name='forumId' th:value="${currentForum.forumId}" style="display: none">-->
+                                                <input name='groupId' value="1" style="display: none">
+                                                <textarea name ='content' class="form-control ml-1 shadow-none textarea" placeholder="게시글 내용을 입력하세요."></textarea>
+                                            </div>
+                                            <div class="mt-2 text-right">
+                                                <input class="btn btn-primary btn-sm shadow-none" type='submit' value='submit'/>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="container">
+<!--                        수정할곳 -->
+<!--                    <div class="container" th:each = "post,index:${postList}">-->
+                        <div class="d-flex  row">
+                            <div class="col-md-7">
+                                <div class="d-flex flex-column comment-section">
+                                    <div class="bg-white p-2">
+                                        <div class="d-flex flex-row user-info"><img class="rounded-circle" src="/img/undraw_profile.svg" width="60" height="60">
                                             <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name">김한성</span><span class="date text-black-50">Shared publicly - March 11, 2021</span></div>
+<!--                                            수정할곳 -->
+<!--                                            <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name" th:text = "${post.userName}">김한성</span><span class="date text-black-50" th:text = "${post.getCreatedDate()}">Shared publicly - March 11, 2021</span></div>-->
                                         </div>
                                         <div class="mt-2">
-                                            <p class="comment-text" th:text = "${postList.content}">게시글 내용 </p>
+                                            <p class="comment-text">게시글 내용 </p>
+<!--                                            수정할곳 -->
+<!--                                            <p class="comment-text" th:text = "${post.content}">게시글 내용 </p>-->
                                         </div>
                                     </div>
 
                                     <div class="bg-white">
                                         <div class="d-flex flex-row fs-12">
-                                            <div class="like p-2 cursor"><i class="fa fa-thumbs-o-up"></i><span class="ml-1">Like</span></div>
-                                            <div class="like p-2 cursor"><i class="fa fa-commenting-o"></i><span class="ml-1">Comment</span></div>
-                                            <div class="like p-2 cursor"><i class="fa fa-share"></i><span class="ml-1">Share</span></div>
+                                            <a class="p-2" onclick="changeLikes()"><i class="fa fa-thumbs-up"></i><span class="testLike">0</span><span class="ml-1">Like</span></a>
+                                            <a class="p-2 "><i class="fa fa-comment"></i><span>0</span><span class="ml-1">Comment</span></a>
+<!--                                            수정할곳 -->
+<!--                                            <a class="p-2" th:onclick="'changeLikes(' + ${post.postId} + ')'"><i class="fa fa-thumbs-up"></i><span class="testLike" th:text = "${post.likes}">0</span><span class="ml-1">Like</span></a>-->
+<!--                                            <a class="p-2 "><i class="fa fa-comment"></i><span th:text = "${#lists.size(post.comments)}">0</span><span class="ml-1">Comment</span></a>-->
                                         </div>
                                     </div>
-
-                                    <div class="bg-light p-2">
-                                        <div class="d-flex flex-row align-items-start"><img class="rounded-circle" src="img/undraw_profile.svg" width="40"><textarea class="form-control ml-1 shadow-none textarea"></textarea></div>
-                                        <div class="mt-2 text-right"><button class="btn btn-primary btn-sm shadow-none" type="button">Post comment</button><button class="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button">Cancel</button></div>
+                                    <!-- comment 부분-->
+                                    <div class="comment">
+<!--                                        수정할곳 -->
+<!--                                    <div class="comment" th:each="comment : ${post.getComments()}">-->
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <a href="#">
+                                                    <img class="rounded-circle photo-profile" src="/img/undraw_profile.svg" width="32" height="32" alt="...">
+                                                </a>
+                                            </div>
+                                            <div class="p-2 media-body" >
+                                                <span class="d-block font-weight-bold name" ><span>덧글 작성자</span> <a href="#" class="anchor-time">작성시간</a> </span>
+                                                <div>
+                                                    <span>덧글내용</span>
+                                                </div>
+<!--                                                수정할곳 -->
+<!--                                                <span class="d-block font-weight-bold name" ><span th:text = '${comment.user.name}'>덧글 작성자</span> <a href="#" class="anchor-time" th:text = '${comment.getCreatedDate()}'>작성시간</a> </span>-->
+<!--                                                <div>-->
+<!--                                                    <span th:text = '${comment.content}'>덧글내용</span>-->
+<!--                                                </div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 덧글 입력 기능-->
+                                    <div class="p-2 InputComment">
+                                        <form action="/v1/web/comment" method="post">
+                                            <div class="d-flex flex-row align-items-start">
+                                                <img class="rounded-circle" src="/img/undraw_profile.svg" width="40">
+                                                <input name='postId' style="display: none">
+                                                <input name='forumId' style="display: none">
+<!--                                                수정할곳 -->
+<!--                                                <input name='postId' th:value="${post.postId}" style="display: none">-->
+<!--                                                <input name='forumId' th:value="${currentForum.forumId}" style="display: none">-->
+                                                <textarea name ='content' class="form-control ml-1 shadow-none textarea" placeholder="덧글을 입력하세요."></textarea>
+                                            </div>
+                                            <div class="mt-2 text-right">
+                                                <input class="btn btn-primary btn-sm shadow-none" type='submit' value='Post comment'/>
+                                                <button class="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button">Cancel</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -443,7 +439,7 @@
 
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -455,66 +451,92 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="index_test.html">Logout</a>
+                    <a class="btn btn-primary" onclick="logout()">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 소그룹 생 modal-->
+    <div class="modal fade" id="subGroup" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">소그룹을 추가하시겠습니까?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <input type="text" class="form-control form-control-user modalInput"
+                       id="InputForumName"
+                       placeholder="그룹명을 입력해주세요. ">
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                    <a class="btn btn-primary" onclick="addForum()"> 추가</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 소그룹 삭제 modal-->
+    <div class="modal fade" id="deleteSmallGroup" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">삭제할 소그룹을 선택하세요.</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+
+                <div class="selectBox">
+                    <input name='fList' type='checkbox'/>
+                    <span>게시판 제목</span>
+                </div>
+<!--                수정할곳 -->
+<!--                <div class="selectBox" th:each = "forum,index:${forumList}">-->
+<!--                    <input name='fList' th:value ='${forum.forumId}'type='checkbox'/>-->
+<!--                    <span th:text = '${forum.forumName}'}>게시판 제목</span>-->
+<!--                </div>-->
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                    <a class="btn btn-primary" onclick="deleteForum()"> 삭제</a>
                 </div>
             </div>
         </div>
     </div>
 
 
-<!--  index.html에서 redirect시 JSON data 잘 넘어오는지 테스트  -->
-    <div id="for-test">
-
-    </div>
-
-    <script>
-        window.addEventListener("load", function(){
-            const forTest = document.querySelector("#for-test");
-            forTest.style.border = '1px solid black';
-            forTest.style.position = 'absolute';
-            forTest.style.left = '40%';
-            forTest.style.top = '50%';
-
-
-            let template = `
-                    <table><thead><tr>
-                        <td>글번호</td>
-                        <td>내용</td>
-                        <td>작성일</td>
-                        <td>그룹번호</td>
-                        <td>좋아요</td>
-                    </tr></thead><tbody>
-                `;
-            postList.forEach((obj, index, objarr) => {
-                template += `<tr>`;
-                for (let key in obj){
-                    template += `<td>${obj[key]}</td>`;
-                }
-                template += `</tr>`;
-            });
-            template += `</tbody></table>`;
-            forTest.innerHTML += template;
-
-        })
+<!--  handlebars 전용 탬플릿  -->
+    <script id="forum-button" type="text/x-handlebars-template">
+        {{#each forumList}}
+        <button class="nav-link abtn">
+            <div class="forum-id:hidden" style="display:none">{{forumId}}</div>
+            <i class="fas fa-fw fa-square"></i>
+            <span>{{forumName}}</span>
+        </button>
+        {{/each}}
     </script>
 
 
+
+
+    <!--  Handlebars.js  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js" integrity="sha512-RNLkV3d+aLtfcpEyFG8jRbnWHxUqVZozacROI4J2F1sTaDqo1dPQYs01OMi1t1w9Y2FdbSCDSQ2ZVdAC8bzgAg==" crossorigin="anonymous"></script>
+
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/vendor/jquery/jquery.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/vendor/jquery-easing/jquery.easing.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
+    <script src="/js/sb-admin-2.js"></script>
+    <script src="/js/temp.js"></script>
 
 </body>
 
