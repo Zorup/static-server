@@ -314,11 +314,7 @@
                                         </div>
                                         <form style="margin-top: 10px"action="/v1/web/post" method="post">
                                             <div class="d-flex flex-row align-items-start">
-                                                <input name='userId' style="display: none">
-                                                <input name='forumId' style="display: none">
-<!--                                                수정할곳 -->
-<!--                                                <input name='userId' th:value="${user.userId}" style="display: none">-->
-<!--                                                <input name='forumId' th:value="${currentForum.forumId}" style="display: none">-->
+                                                <input class="current-forum-id" name='forumId' style="display: none">
                                                 <input name='groupId' value="1" style="display: none">
                                                 <textarea name ='content' class="form-control ml-1 shadow-none textarea" placeholder="게시글 내용을 입력하세요."></textarea>
                                             </div>
@@ -332,80 +328,7 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="container">
-<!--                        수정할곳 -->
-<!--                    <div class="container" th:each = "post,index:${postList}">-->
-                        <div class="d-flex  row">
-                            <div class="col-md-7">
-                                <div class="d-flex flex-column comment-section">
-                                    <div class="bg-white p-2">
-                                        <div class="d-flex flex-row user-info"><img class="rounded-circle" src="/img/undraw_profile.svg" width="60" height="60">
-                                            <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name">김한성</span><span class="date text-black-50">Shared publicly - March 11, 2021</span></div>
-<!--                                            수정할곳 -->
-<!--                                            <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name" th:text = "${post.userName}">김한성</span><span class="date text-black-50" th:text = "${post.getCreatedDate()}">Shared publicly - March 11, 2021</span></div>-->
-                                        </div>
-                                        <div class="mt-2">
-                                            <p class="comment-text">게시글 내용 </p>
-<!--                                            수정할곳 -->
-<!--                                            <p class="comment-text" th:text = "${post.content}">게시글 내용 </p>-->
-                                        </div>
-                                    </div>
-
-                                    <div class="bg-white">
-                                        <div class="d-flex flex-row fs-12">
-                                            <a class="p-2" onclick="changeLikes()"><i class="fa fa-thumbs-up"></i><span class="testLike">0</span><span class="ml-1">Like</span></a>
-                                            <a class="p-2 "><i class="fa fa-comment"></i><span>0</span><span class="ml-1">Comment</span></a>
-<!--                                            수정할곳 -->
-<!--                                            <a class="p-2" th:onclick="'changeLikes(' + ${post.postId} + ')'"><i class="fa fa-thumbs-up"></i><span class="testLike" th:text = "${post.likes}">0</span><span class="ml-1">Like</span></a>-->
-<!--                                            <a class="p-2 "><i class="fa fa-comment"></i><span th:text = "${#lists.size(post.comments)}">0</span><span class="ml-1">Comment</span></a>-->
-                                        </div>
-                                    </div>
-                                    <!-- comment 부분-->
-                                    <div class="comment">
-<!--                                        수정할곳 -->
-<!--                                    <div class="comment" th:each="comment : ${post.getComments()}">-->
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <a href="#">
-                                                    <img class="rounded-circle photo-profile" src="/img/undraw_profile.svg" width="32" height="32" alt="...">
-                                                </a>
-                                            </div>
-                                            <div class="p-2 media-body" >
-                                                <span class="d-block font-weight-bold name" ><span>덧글 작성자</span> <a href="#" class="anchor-time">작성시간</a> </span>
-                                                <div>
-                                                    <span>덧글내용</span>
-                                                </div>
-<!--                                                수정할곳 -->
-<!--                                                <span class="d-block font-weight-bold name" ><span th:text = '${comment.user.name}'>덧글 작성자</span> <a href="#" class="anchor-time" th:text = '${comment.getCreatedDate()}'>작성시간</a> </span>-->
-<!--                                                <div>-->
-<!--                                                    <span th:text = '${comment.content}'>덧글내용</span>-->
-<!--                                                </div>-->
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- 덧글 입력 기능-->
-                                    <div class="p-2 InputComment">
-                                        <form action="/v1/web/comment" method="post">
-                                            <div class="d-flex flex-row align-items-start">
-                                                <img class="rounded-circle" src="/img/undraw_profile.svg" width="40">
-                                                <input name='postId' style="display: none">
-                                                <input name='forumId' style="display: none">
-<!--                                                수정할곳 -->
-<!--                                                <input name='postId' th:value="${post.postId}" style="display: none">-->
-<!--                                                <input name='forumId' th:value="${currentForum.forumId}" style="display: none">-->
-                                                <textarea name ='content' class="form-control ml-1 shadow-none textarea" placeholder="덧글을 입력하세요."></textarea>
-                                            </div>
-                                            <div class="mt-2 text-right">
-                                                <input class="btn btn-primary btn-sm shadow-none" type='submit' value='Post comment'/>
-                                                <button class="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button">Cancel</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 여기서끝 -->
+                    <!-- 작성된 피드 데이터 템플릿이 들어올 자리 -->
                 </div>
                 <!-- /.container-fluid -->
 
@@ -509,13 +432,75 @@
 <!--  handlebars 전용 탬플릿  -->
     <script id="forum-button" type="text/x-handlebars-template">
         {{#each forumList}}
-        <button class="nav-link abtn">
+        <button class="nav-link abtn" onclick="switchFeed()">
             <div class="forum-id:hidden" style="display:none">{{forumId}}</div>
             <i class="fas fa-fw fa-square"></i>
             <span>{{forumName}}</span>
         </button>
         {{/each}}
     </script>
+
+    <script id="feed" type="text/x-handlebars-template">
+        {{#each postList}}
+        <div class="container">
+            <div class="d-flex  row">
+                <div class="col-md-7">
+                    <div class="d-flex flex-column comment-section">
+                        <div class="bg-white p-2">
+                            <div class="d-flex flex-row user-info"><img class="rounded-circle" src="/img/undraw_profile.svg" width="60" height="60">
+                                <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name">{{userName}}</span><span class="date text-black-50">{{createdDate}}</span></div>
+                            </div>
+                            <div class="mt-2">
+                                <p class="comment-text">{{content}}</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white">
+                            <div class="d-flex flex-row fs-12">
+                                <a class="p-2" onclick="changeLikes()"><i class="fa fa-thumbs-up"></i><span class="testLike">{{likes}}</span><span class="ml-1">Like</span></a>
+                                <a class="p-2 "><i class="fa fa-comment"></i><span>{{comments.length}}</span><span class="ml-1">Comment</span></a>
+                            </div>
+                        </div>
+                        <!-- comment 부분-->
+                        {{#each comments}}
+                        <div class="comment">
+                            <div class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="rounded-circle photo-profile" src="/img/undraw_profile.svg" width="32" height="32" alt="...">
+                                    </a>
+                                </div>
+                                <div class="p-2 media-body" >
+                                    <span class="d-block font-weight-bold name" ><span>{{userName}}</span> <a href="#" class="anchor-time">{{createdDate}}</a> </span>
+                                    <div>
+                                        <span>{{content}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                        <!-- 덧글 입력 기능-->
+                        <div class="p-2 InputComment">
+                            <form action="/v1/web/comment" method="post">
+                                <div class="d-flex flex-row align-items-start">
+                                    <img class="rounded-circle" src="/img/undraw_profile.svg" width="40">
+                                    <input name='postId' value="{{postId}}" style="display: none">
+                                    <input class="current-forum-id" name='forumId' style="display: none">
+                                    <textarea name ='content' class="form-control ml-1 shadow-none textarea" placeholder="덧글을 입력하세요."></textarea>
+                                </div>
+                                <div class="mt-2 text-right">
+                                    <input class="btn btn-primary btn-sm shadow-none" type='submit' value='Post comment'/>
+                                    <button class="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </script>
+
 
 
 

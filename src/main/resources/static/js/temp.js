@@ -51,6 +51,17 @@ const postAjax = (prev) => {   // 기본포럼의 피드정보 요청, forumAjax
     });
 }
 
+const drawFeed = () => {    // 피드리스트 그리는 모듈
+    const source = document.querySelector("#feed").innerText;
+    let template = Handlebars.compile(source);
+    const wrapper = {
+        postList: initData.postData.list
+    };
+    let result = template(wrapper);
+    document.querySelector(".container-fluid").children[1]
+        .insertAdjacentHTML('afterend', result);
+}
+
 const drawForum = () => { // 포럼리스트 그리는 모듈
     const source = document.querySelector("#forum-button").innerText;
     let template = Handlebars.compile(source);
@@ -59,6 +70,9 @@ const drawForum = () => { // 포럼리스트 그리는 모듈
     };
     let result = template(wrapper);
     document.querySelector(".nav-item > .forum-list").innerHTML = result;
+    document.querySelectorAll(".current-forum-id").forEach((item)=>{
+        item.innerText = initData.forumData.defaultForum.forumId;
+    })
 }
 
 const drawUser = () => {    // 유저프로필 채우는 모듈
@@ -69,9 +83,10 @@ const drawUser = () => {    // 유저프로필 채우는 모듈
 }
 
 const initDraw = () => {   // 초기데이터로 화면 그리는 function
-    // console.log("user data: ", initData.userData);
-    // console.log("forum data: ", initData.forumData);
-    // console.log("post data: ", initData.postData);
+    console.log("user data: ", initData.userData);
+    console.log("forum data: ", initData.forumData);
+    console.log("post data: ", initData.postData);
+    drawFeed(); // drawForum 보다 먼저 불려야함!
     drawForum();
     drawUser();
 }
