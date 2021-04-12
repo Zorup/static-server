@@ -62,8 +62,10 @@ const drawForum = () => { // 포럼리스트 그리는 모듈
 }
 
 const drawUser = () => {    // 유저프로필 채우는 모듈
-    const userProfile = document.querySelector("#content .navbar-nav #userDropdown span");
-    userProfile.innerText = initData.userData.data.name;
+    const userProfile = document.querySelectorAll(".login-user-name");
+    document.querySelectorAll(".login-user-name").forEach((item)=>{
+        item.innerText = initData.userData.data.name;
+    });
 }
 
 const initDraw = () => {   // 초기데이터로 화면 그리는 function
