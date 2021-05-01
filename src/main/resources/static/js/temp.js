@@ -1,7 +1,9 @@
 
 /**
- * 초기데이터 불러오고 화면에 데이터 매핑하기
+ * 초기데이터 불러오고 랜더링 완료 후 이벤트헨들러 등록
  */
+let deleteForumList = [];
+
 const initData = {
     userData: "",
     forumData: "",
@@ -110,9 +112,22 @@ const initDraw = () => {   // 초기데이터로 화면 그리는 function
     drawUser();
 }
 
+const initAddEvent = () => {
+    $('input[name=fList]').click(function(){    // 체크박스 체크/해제시
+        let ischecked = $(this).is(":checked");
+        if(ischecked){
+            deleteForumList.push($(this).val());
+            //console.log($(this).val());
+        }else{
+            deleteForumList = deleteForumList.filter((element)=> element !== $(this).val());
+            // console.log("배열 원소 삭제 "+$(this).val());
+        }
+    });
+}
+
 const initAjax = () => {    // 초기데이터 불러오고 화면그리는 function
     userAjax();
-    forumAjax().then(postAjax).done(initDraw);   // forumAjax 응답받은 후 응답데이터 이용해 postAjax 요청
+    forumAjax().then(postAjax).done(() => {initDraw(); initAddEvent();});   // forumAjax 응답받은 후 응답데이터 이용해 postAjax 요청
 }
 
 initAjax();
@@ -121,21 +136,28 @@ initAjax();
 
 
 
+/**
+ * 버튼동작들
+ */
+function deleteForum(){
+    alert("delte");
 
-
-
-let deleteForumList = [];
-
-$('input[name=fList]').click(function(){
-    let ischecked = $(this).is(":checked");
-    if(ischecked){
-        deleteForumList.push($(this).val());
-        //console.log($(this).val());
-    }else{
-        deleteForumList = deleteForumList.filter((element)=> element !== $(this).val());
-        // console.log("배열 원소 삭제 "+$(this).val());
-    }
-});
+    $.ajax({
+        url: `${window.API_GATEWAY_URI}/main/v1/forum`,
+        type: 'DELETE',
+        data: {
+            forumId: deleteForumList,
+        },
+        xhrFields: {
+            withCredentials: true
+        }
+    }).done(function(){
+        location.href = "/template";
+    }).fail(function(){
+        alert("유효하지 않은 입력이거나, 네트워크 오류가 존재합니다. 다시 시도해주세요.");
+    });
+    deleteForumList = [];
+}
 
 function logout(){
     $.ajax({
@@ -155,7 +177,7 @@ function addForum(){
     let forumName = $('#InputForumName').val();
 
     $.ajax({
-        url: '/v1/forum',
+        url: `${window.API_GATEWAY_URI}/main/v1/forum`,
         type: 'POST',
         data: {
             forumName: forumName,
@@ -169,27 +191,6 @@ function addForum(){
         alert("유효하지 않은 입력이거나, 네트워크 오류가 존재합니다. 다시 시도해주세요.");
     });
 }
-
-function deleteForum(){
-    alert("delte");
-
-    $.ajax({
-        url: '/v1/forum',
-        type: 'DELETE',
-        data: {
-            forumId: deleteForumList,
-        },
-        xhrFields: {
-            withCredentials: true
-        }
-    }).done(function(){
-        location.href = "/template";
-    }).fail(function(){
-        alert("유효하지 않은 입력이거나, 네트워크 오류가 존재합니다. 다시 시도해주세요.");
-    });
-    deleteForumList = [];
-}
-
 
 function switchFeed(param){
     let url = '/template/' + param;
