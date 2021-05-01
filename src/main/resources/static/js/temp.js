@@ -53,11 +53,11 @@ const postAjax = (prev) => {   // 기본포럼의 피드정보 요청, forumAjax
     });
 }
 
-const drawFeed = () => {    // 피드리스트 그리는 모듈
+const drawFeed = (pList) => {    // 피드리스트 그리는 모듈
     const source = document.querySelector("#feed").innerText;
     let template = Handlebars.compile(source);
     const wrapper = {
-        postList: initData.postData.list
+        postList: pList
     };
     let result = template(wrapper);
     document.querySelector(".container-fluid").children[1]
@@ -74,13 +74,13 @@ const forumButton = () => { // 좌측네비 포럼버튼
     document.querySelector(".nav-item > .forum-list").innerHTML = result;
 }
 
-const putDefaultForumId = () => {   // 디폴트포럼 아이디 필요한부분 채우기
+const putDefaultForumId = (fId) => {   // 디폴트포럼 아이디 필요한부분 채우기
     document.querySelectorAll(".current-forum-id").forEach((item)=>{
-        item.value = initData.forumData.defaultForum.forumId;
+        item.value = fId;
     });
 }
 
-const forumDeleteCheckbout = () => {    // 포럼삭제 체크박스
+const forumDeleteCheckbutton = () => {    // 포럼삭제 체크박스
     const source2 = document.querySelector("#forum-delete-checkbox").innerText;
     let template = Handlebars.compile(source2);
     const wrapper = {
@@ -92,8 +92,8 @@ const forumDeleteCheckbout = () => {    // 포럼삭제 체크박스
 
 const drawForum = () => { // 포럼관련 그리는 모듈
     forumButton();
-    putDefaultForumId();
-    forumDeleteCheckbout();
+    putDefaultForumId(initData.forumData.defaultForum.forumId);
+    forumDeleteCheckbutton();
 }
 
 const drawUser = () => {    // 유저프로필 채우는 모듈
@@ -107,9 +107,8 @@ const initDraw = () => {   // 초기데이터로 화면 그리는 function
     console.log("user data: ", initData.userData);
     console.log("forum data: ", initData.forumData);
     console.log("post data: ", initData.postData);
-    drawFeed(); // drawForum 보다 먼저 불려야함!
+    drawFeed(initData.postData.list); // drawForum 보다 먼저 불려야함!
     drawForum();
-    drawUser();
 }
 
 const initAddEvent = () => {
@@ -126,7 +125,7 @@ const initAddEvent = () => {
 }
 
 const initAjax = () => {    // 초기데이터 불러오고 화면그리는 function
-    userAjax();
+    userAjax().done(drawUser);  // user정보 오는대로 먼저 랜더링
     forumAjax().then(postAjax).done(() => {initDraw(); initAddEvent();});   // forumAjax 응답받은 후 응답데이터 이용해 postAjax 요청
 }
 
