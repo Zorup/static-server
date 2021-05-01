@@ -111,8 +111,8 @@ const initDraw = () => {   // 초기데이터로 화면 그리는 function
     drawForum();
 }
 
-const initAddEvent = () => {
-    $('input[name=fList]').click(function(){    // 체크박스 체크/해제시
+const forumDeleteCheckEvent = () => {    // 체크박스 체크/해제 클릭 이벤트
+    $('input[name=fList]').click(function(){
         let ischecked = $(this).is(":checked");
         if(ischecked){
             deleteForumList.push($(this).val());
@@ -122,6 +122,32 @@ const initAddEvent = () => {
             // console.log("배열 원소 삭제 "+$(this).val());
         }
     });
+}
+
+const likeButtonEvent = () => {
+    $('.like-button').click(function(){
+        let temp = this;
+        let postId = temp.parentElement.childNodes[1].value;
+        $.ajax({
+            url: `${window.API_GATEWAY_URI}/main/v1/like`,
+            type: 'POST',
+            data: {
+                postId: postId,
+            },
+            xhrFields: {
+                withCredentials: true
+            }
+        }).done(function(data){
+            temp.childNodes[1].innerText = data['data'];
+        }).fail(function(xhr, status, errorThrown){
+            console.log(`ajax failed! ${xhr.status}: ${errorThrown}`);
+        });
+    });
+}
+
+const initAddEvent = () => {
+    forumDeleteCheckEvent();
+    likeButtonEvent();
 }
 
 const initAjax = () => {    // 초기데이터 불러오고 화면그리는 function
@@ -221,22 +247,6 @@ function switchFeed(param){
         drawSwitchedFeed(initData.postData.list);
         drawUser();
         putDefaultForumId(param);
-    });
-}
-
-function changeLikes(postId){
-    $.ajax({
-        url: '/v1/like',
-        type: 'POST',
-        data: {
-            postId: postId,
-        },
-        xhrFields: {
-            withCredentials: true
-        }
-    }).done(function(data){
-        $('.testLike').text(data['data']);
-    }).fail(function(){
-        alert("유효하지 않은 입력이거나, 네트워크 오류가 존재합니다. 다시 시도해주세요.");
+        likeButtonEvent();
     });
 }

@@ -459,7 +459,8 @@
 
                         <div class="bg-white">
                             <div class="d-flex flex-row fs-12">
-                                <a class="p-2" onclick="changeLikes()"><i class="fa fa-thumbs-up"></i><span class="testLike">{{likes}}</span><span class="ml-1">Like</span></a>
+                                <input type="hidden" value="{{postId}}" />
+                                <a class="p-2 like-button"><i class="fa fa-thumbs-up"></i><span class="testLike">{{likes}}</span><span class="ml-1">Like</span></a>
                                 <a class="p-2 "><i class="fa fa-comment"></i><span>{{comments.length}}</span><span class="ml-1">Comment</span></a>
                             </div>
                         </div>
