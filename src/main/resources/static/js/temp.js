@@ -1,3 +1,14 @@
+/**
+ * page history UX 개선용
+ */
+$(window).on('hashchange', function(){
+    if(window.location.hash.slice(1,6) === "forum"){
+        let forumId = window.location.hash.slice(7);
+        switchFeed(forumId);
+    }
+});
+
+
 
 /**
  * 초기데이터 불러오고 랜더링 완료 후 이벤트헨들러 등록
@@ -151,8 +162,11 @@ const initAddEvent = () => {
 }
 
 const initAjax = () => {    // 초기데이터 불러오고 화면그리는 function
-    userAjax();  // user정보 오는대로 먼저 랜더링
-    forumAjax().then(postAjax).done(() => {initDraw(); initAddEvent();});   // forumAjax 응답받은 후 응답데이터 이용해 postAjax 요청
+    userAjax();
+    forumAjax().then(postAjax).done(() => {
+        initDraw(); initAddEvent(); // forumAjax 응답받은 후 응답데이터 이용해 postAjax 요청
+        window.location.hash = `forum/${initData.forumData.defaultForum.forumId}`;  // history UX용
+    });
 }
 
 initAjax();
@@ -164,7 +178,7 @@ initAjax();
 /**
  * 버튼동작들
  */
-function addForum(){
+const addForum = () => {
     let forumName = $('#InputForumName').val();
 
     $.ajax({
@@ -183,7 +197,7 @@ function addForum(){
     });
 }
 
-function deleteForum(){
+const deleteForum = () => {
     alert("delte");
 
     $.ajax({
@@ -203,7 +217,7 @@ function deleteForum(){
     deleteForumList = [];
 }
 
-function logout(){
+const logout = () => {
     $.ajax({
         url: `${window.API_GATEWAY_URI}/main/v1/logout`,
         type: 'POST',
@@ -242,11 +256,15 @@ const drawSwitchedFeed = (pList) => {    // 피드리스트 그리는 모듈
     document.querySelector(".container-fluid").innerHTML = result;
 }
 
-function switchFeed(param){
+
+
+const switchFeed = (param) => {
     switchFeedAjax(param).done(() => {
         drawSwitchedFeed(initData.postData.list);
         drawUser();
         putDefaultForumId(param);
         likeButtonEvent();
+
+        window.location.hash = `forum/${param}`;    // history UX용
     });
 }
