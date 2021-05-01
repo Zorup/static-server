@@ -62,7 +62,7 @@ const drawFeed = () => {    // 피드리스트 그리는 모듈
         .insertAdjacentHTML('afterend', result);
 }
 
-const drawForum = () => { // 포럼리스트 그리는 모듈
+const forumButton = () => { // 좌측네비 포럼버튼
     const source = document.querySelector("#forum-button").innerText;
     let template = Handlebars.compile(source);
     const wrapper = {
@@ -70,9 +70,28 @@ const drawForum = () => { // 포럼리스트 그리는 모듈
     };
     let result = template(wrapper);
     document.querySelector(".nav-item > .forum-list").innerHTML = result;
+}
+
+const putDefaultForumId = () => {   // 디폴트포럼 아이디 필요한부분 채우기
     document.querySelectorAll(".current-forum-id").forEach((item)=>{
-        item.innerText = initData.forumData.defaultForum.forumId;
-    })
+        item.value = initData.forumData.defaultForum.forumId;
+    });
+}
+
+const forumDeleteCheckbout = () => {    // 포럼삭제 체크박스
+    const source2 = document.querySelector("#forum-delete-checkbox").innerText;
+    let template = Handlebars.compile(source2);
+    const wrapper = {
+        forumList: initData.forumData.forumList
+    };
+    result = template(wrapper);
+    document.querySelector(".forum-delete-list").innerHTML = result;
+}
+
+const drawForum = () => { // 포럼관련 그리는 모듈
+    forumButton();
+    putDefaultForumId();
+    forumDeleteCheckbout();
 }
 
 const drawUser = () => {    // 유저프로필 채우는 모듈

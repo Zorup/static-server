@@ -410,15 +410,8 @@
                     </button>
                 </div>
 
-                <div class="selectBox">
-                    <input name='fList' type='checkbox'/>
-                    <span>게시판 제목</span>
+                <div class="forum-delete-list">
                 </div>
-<!--                수정할곳 -->
-<!--                <div class="selectBox" th:each = "forum,index:${forumList}">-->
-<!--                    <input name='fList' th:value ='${forum.forumId}'type='checkbox'/>-->
-<!--                    <span th:text = '${forum.forumName}'}>게시판 제목</span>-->
-<!--                </div>-->
 
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
@@ -437,6 +430,15 @@
             <i class="fas fa-fw fa-square"></i>
             <span>{{forumName}}</span>
         </button>
+        {{/each}}
+    </script>
+
+    <script id="forum-delete-checkbox" type="text/x-handlebars-template">
+        {{#each forumList}}
+        <div class="selectBox">
+            <input name='fList' value="{{forumId}}" type='checkbox'/>
+            <span>{{forumName}}</span>
+        </div>
         {{/each}}
     </script>
 
