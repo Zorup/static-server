@@ -53,15 +53,14 @@ const postAjax = (prev) => {   // 기본포럼의 피드정보 요청, forumAjax
     });
 }
 
-const drawFeed = (pList) => {    // 피드리스트 그리는 모듈
+const drawFeed = () => {    // 피드리스트 그리는 모듈
     const source = document.querySelector("#feed").innerText;
     let template = Handlebars.compile(source);
     const wrapper = {
-        postList: pList
+        postList: initData.postData.list
     };
     let result = template(wrapper);
-    document.querySelector(".container-fluid").children[1]
-        .insertAdjacentHTML('afterend', result);
+    document.querySelector(".container-fluid").innerHTML = result;
 }
 
 const forumButton = () => { // 좌측네비 포럼버튼
@@ -107,7 +106,8 @@ const initDraw = () => {   // 초기데이터로 화면 그리는 function
     console.log("user data: ", initData.userData);
     console.log("forum data: ", initData.forumData);
     console.log("post data: ", initData.postData);
-    drawFeed(initData.postData.list); // drawForum 보다 먼저 불려야함!
+    drawFeed(); // drawForum 보다 먼저 불려야함!
+    drawUser();
     drawForum();
 }
 
@@ -125,7 +125,7 @@ const initAddEvent = () => {
 }
 
 const initAjax = () => {    // 초기데이터 불러오고 화면그리는 function
-    userAjax().done(drawUser);  // user정보 오는대로 먼저 랜더링
+    userAjax();  // user정보 오는대로 먼저 랜더링
     forumAjax().then(postAjax).done(() => {initDraw(); initAddEvent();});   // forumAjax 응답받은 후 응답데이터 이용해 postAjax 요청
 }
 
@@ -192,10 +192,36 @@ function logout(){
 }
 
 
+const switchFeedAjax = (fid) => {   // 클릭된 포럼의 피드정보 요청
+    return $.ajax({
+        url: `${window.API_GATEWAY_URI}/main/v1/forum/${fid}/postview`,
+        type: 'GET',
+        xhrFields: {
+            withCredentials: true
+        },
+    }).done(function(data){
+        initData.postData = data;    // data 저장 (initData 객체 계속 이용)
+    }).fail(function(xhr, status, errorThrown){
+        console.log(`ajax failed! ${xhr.status}: ${errorThrown}`);
+    });
+}
+
+const drawSwitchedFeed = (pList) => {    // 피드리스트 그리는 모듈
+    const source = document.querySelector("#feed").innerText;
+    let template = Handlebars.compile(source);
+    const wrapper = {
+        postList: pList
+    };
+    let result = template(wrapper);
+    document.querySelector(".container-fluid").innerHTML = result;
+}
 
 function switchFeed(param){
-    let url = '/template/' + param;
-    location.href = url;
+    switchFeedAjax(param).done(() => {
+        drawSwitchedFeed(initData.postData.list);
+        drawUser();
+        putDefaultForumId(param);
+    });
 }
 
 function changeLikes(postId){
