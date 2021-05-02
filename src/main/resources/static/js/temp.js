@@ -11,7 +11,7 @@ $(window).on('hashchange', function(){
 
 
 /**
- * 초기데이터 불러오고 랜더링 완료 후 이벤트헨들러 등록
+ * 전역 변수들
  */
 let deleteForumList = [];
 
@@ -21,6 +21,10 @@ const initData = {
     postData: "",
 }
 
+
+/**
+ * ajax 요청들
+ */
 const userAjax = (prev) => {   // 유저정보 요청
     return $.ajax({
         url: `${window.API_GATEWAY_URI}/main/v1/user-info`,
@@ -64,6 +68,24 @@ const postAjax = (prev) => {   // 기본포럼의 피드정보 요청, forumAjax
     });
 }
 
+const onePostAjax = (pid, wrapper) => {  // 특정 포스트 정보 요청 (댓글포함)
+    return $.ajax({
+        url: `${window.API_GATEWAY_URI}/main/v1/post/${pid}`,
+        type: 'GET',
+        xhrFields: {
+            withCredentials: true
+        },
+    }).done(function(data){
+        console.log(data);
+        wrapper.data = data.data;    // data 저장
+    }).fail(function(xhr, status, errorThrown){
+        console.log(`ajax failed! ${xhr.status}: ${errorThrown}`);
+    });
+}
+
+/**
+ * 초기 랜더링 로직들
+ */
 const drawFeed = () => {    // 피드리스트 그리는 모듈
     const source = document.querySelector("#feed").innerText;
     let template = Handlebars.compile(source);
@@ -122,8 +144,10 @@ const initDraw = () => {   // 초기데이터로 화면 그리는 function
     drawForum();
 }
 
+
+/* 랜더링 후 부착될 이벤트들 */
 const forumDeleteCheckEvent = () => {    // 체크박스 체크/해제 클릭 이벤트
-    $('input[name=fList]').click(function(){
+    $('input[name=fList]').off().on('click', function(){
         let ischecked = $(this).is(":checked");
         if(ischecked){
             deleteForumList.push($(this).val());
@@ -136,7 +160,7 @@ const forumDeleteCheckEvent = () => {    // 체크박스 체크/해제 클릭 �
 }
 
 const likeButtonEvent = () => {
-    $('.like-button').click(function(){
+    $('.like-button').off().on('click', function(){
         let temp = this;
         let postId = temp.parentElement.childNodes[1].value;
         $.ajax({
@@ -156,15 +180,87 @@ const likeButtonEvent = () => {
     });
 }
 
+// 글작성 버튼 클릭시 서버로 글 데이터를 전송하고 현재 포럼 피드 데이터를 다시 받아와서 피드리스트를 다 갈아치운다
+const postCreateEvent = () => {
+    $('#post-write-submit').off().on('click', function(){
+        let postForm = $('#post-write-form');
+        let formData = new FormData(postForm[0]);
+        let currentForumId = document.querySelector("#post-write-form")
+            .querySelector(".current-forum-id").value;
+
+        // formData 체크용. formdata는 console.log로 확인 불가
+        // for (let key of formData.entries()) {
+        //     console.log(key[0] + ', ' + key[1])
+        // }
+
+        // 작성 글 데이터 전송
+        $.ajax({
+            url: `${window.API_GATEWAY_URI}/main/v1/post`,
+            processData: false, // for multipart, queryString으로 안만들기 위해
+            contentType: false, // for multipart, multipart용 contentType 자동지정
+            type: 'POST',
+            data: formData,
+            xhrFields: {
+                withCredentials: true
+            }
+        }).done(function(){
+            // 현재포럼 피드 다시 받아오고 재랜더링 (이벤트 다시 다는 과정 포함)
+            switchFeed(currentForumId);
+        }).fail(function(xhr, status, errorThrown){
+            console.log(`ajax failed! ${xhr.status}: ${errorThrown}`);
+        });
+    });
+}
+
+// 댓글작성 버튼 클릭시 서버로 댓글 데이터를 전송하고 현재 글 데이터만 다시 받아와서 현재글(댓글포함)을 갈아치운다
+const commentCreateEvent = () => {
+    $('.comment-write-submit').off().on('click', function(){
+        let container = this.parentNode.parentNode.parentNode.parentNode
+            .parentNode.parentNode.parentNode;
+
+        let commentForm = container.querySelector(".comment-write-form");
+        let formData = new FormData(commentForm)
+
+        // 작성 댓글 데이터 전송
+        $.ajax({
+            url: `${window.API_GATEWAY_URI}/main/v1/comment`,
+            processData: false, // for multipart, queryString으로 안만들기 위해
+            contentType: false, // for multipart, multipart용 contentType 자동지정
+            type: 'POST',
+            data: formData,
+            xhrFields: {
+                withCredentials: true
+            }
+        }).done(function(){
+            // 현재 글 데이터 다시 받아와서 재랜더링하고 이벤트 다시달기
+            let currentPostId = container.querySelector(".current-post-id").value;
+            let wrapper = {data: ""};
+            onePostAjax(currentPostId, wrapper).done(function(){
+                const source = document.querySelector("#one-post").innerText;
+                let template = Handlebars.compile(source);
+                result = template(wrapper.data);
+                container.innerHTML = result;
+
+                switchAddEvent();   // 포럼전환 후 사용하는 모듈 재활용
+            });
+        }).fail(function(xhr, status, errorThrown){
+            console.log(`ajax failed! ${xhr.status}: ${errorThrown}`);
+        });
+    });
+}
+
 const initAddEvent = () => {
     forumDeleteCheckEvent();
     likeButtonEvent();
+    postCreateEvent();
+    commentCreateEvent();
 }
 
 const initAjax = () => {    // 초기데이터 불러오고 화면그리는 function
-    userAjax();
-    forumAjax().then(postAjax).done(() => {
-        initDraw(); initAddEvent(); // forumAjax 응답받은 후 응답데이터 이용해 postAjax 요청
+    // forumAjax 응답받은 후 응답데이터 이용해 postAjax 요청
+    // userAjax와, forumAjax->postAjax 모두 끝나면 랜더링동작, 이벤트부착동작 실
+    $.when(userAjax(), forumAjax().then(postAjax)).done(() => {
+        initDraw(); initAddEvent();
         window.location.hash = `forum/${initData.forumData.defaultForum.forumId}`;  // history UX용
     });
 }
@@ -232,6 +328,9 @@ const logout = () => {
 }
 
 
+/**
+ *  포럼 전환시 동작들
+ */
 const switchFeedAjax = (fid) => {   // 클릭된 포럼의 피드정보 요청
     return $.ajax({
         url: `${window.API_GATEWAY_URI}/main/v1/forum/${fid}/postview`,
@@ -256,15 +355,20 @@ const drawSwitchedFeed = (pList) => {    // 피드리스트 그리는 모듈
     document.querySelector(".container-fluid").innerHTML = result;
 }
 
-
+const switchAddEvent = () => {
+    likeButtonEvent();
+    postCreateEvent();
+    commentCreateEvent();
+}
 
 const switchFeed = (param) => {
     switchFeedAjax(param).done(() => {
         drawSwitchedFeed(initData.postData.list);
         drawUser();
         putDefaultForumId(param);
-        likeButtonEvent();
+        switchAddEvent();
 
         window.location.hash = `forum/${param}`;    // history UX용
     });
 }
+
