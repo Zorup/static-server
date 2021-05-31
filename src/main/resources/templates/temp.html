@@ -18,7 +18,9 @@
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="/css/index.css" rel="stylesheet">
+    <link href="/css/chat.css" rel="stylesheet">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -325,6 +327,31 @@
     </div>
     <!-- End of Page Wrapper -->
 
+
+    <!-- 채팅 뷰 -->
+    <div class="chat-view">
+        <div class="chat-content">
+            <ul>
+                <li class="nothing"></li>
+            </ul>
+        </div>
+        <div class="chat-write-form">
+            <textarea name=""></textarea>
+            <input class="button-chat-send" type="button" value="보내기">
+        </div>
+    </div>
+
+    <!-- 채팅목록 -->
+    <div id="chat-list" class="chat-list">
+        <ul>
+            <li><div class="chat-list-top">채팅 목록</div></li>
+            <li><div class="chat-list-bottom"></div></li>
+        </ul>
+    </div>
+
+    <!-- 채팅 버튼 -->
+    <input id="button-chat-list" class="button-chat-list" type="button" value="대화">
+    
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
@@ -566,7 +593,20 @@
         </div>
     </script>
 
+    <!--  챗뷰(대화방) 틀에 넣을 메시지 리스트  -->
+    <script id="chat-view-innerList" type="text/x-handlebars-template">
+        <li class="nothing"></li>
+        {{#each messageList}}
+        <li class="{{whose}}"><div>{{message}}</div></li>
+        {{/each}}
+    </script>
 
+    <!--  채팅방 리스트 틀에 넣을 대화방 리스트  -->
+    <script id="chat-list-innerList" type="text/x-handlebars-template">
+        {{#each chatRoomList}}
+        <li><div class="chat-room" data-room-id="{{roomId}}">{{roomName}}</div></li>
+        {{/each}}
+    </script>
 
 
 
@@ -583,6 +623,7 @@
     <!-- Custom scripts for all pages-->
     <script src="/js/sb-admin-2.js"></script>
     <script src="/js/temp.js"></script>
+    <script src="/js/chat.js"></script>
 
 </body>
 

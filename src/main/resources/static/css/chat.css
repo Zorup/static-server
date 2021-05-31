@@ -1,0 +1,115 @@
+#button-chat-list {
+    background-color:#4273df;
+    border-radius:9px;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-size:17px;
+    padding:12px 9px;
+    position: fixed;
+    bottom: 4rem;
+    right: 0.885rem;
+    border-style: none;
+}
+#button-chat-list:hover {
+    background-color:#9dafd4;
+    text-decoration: none;
+    color: #efeff1
+}
+
+#chat-list {
+    display: none;
+    position: fixed;
+    bottom: 7.3rem;
+    background: #c1d0e0;
+    border-radius: 9px;
+    text-align: center;
+    right: 0.885rem;
+    width: 120px;
+    height: 400px;
+    overflow: scroll;
+}
+#chat-list > ul {
+    margin: 0 auto;
+    padding: 0px;
+}
+#chat-list > ul > li {
+    list-style: none;
+    border-bottom: 1px solid #a2a2a2;
+    height: 50px;
+    line-height: 50px;
+    color: #151515;
+}
+#chat-list > ul > li:first-child {
+    border-bottom: 1px solid #a2a2a2;
+    height: 30px;
+    line-height: 30px;
+    color: white;
+    font-size: 15px;
+}
+#chat-list > ul > li:last-child {
+    height: 20px;
+    color: white;
+    border: none;
+}
+#chat-list > ul > li > .chat-room:hover {
+    background: #e6f1df;
+}
+
+
+.chat-view {
+    display: none;
+    position: fixed;
+    bottom: 7.3rem;
+    right: 8.5rem;
+    padding: 10px;
+    width: 350px;
+    height: 400px;
+    background: #e6f1df;
+    border-radius: 10px;
+}
+.chat-view > .chat-content {
+    height: 320px;
+    padding-bottom: 5px;
+    position: relative;
+    overflow: scroll;
+}
+.chat-view > .chat-content > ul{
+    position: absolute;
+    height: 320px;
+    width: 100%;
+    left: -30px;
+}
+.chat-view > .chat-content > ul > li{
+    list-style: none;
+}
+.chat-view > .chat-content > ul > li.chat-message-my{
+    display: flex;
+    justify-content: flex-end;
+}
+.chat-view > .chat-content > ul > li > div{
+    line-height: 140%;
+    max-width: 240px;
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+    margin-bottom: 2px;
+    border-radius: 5px;
+    background: #c1d0e0;
+    white-space: pre-wrap;
+    color: #525253;
+}
+.chat-view > .chat-write-form {
+    background: white;
+}
+.chat-view > .chat-write-form > textarea{
+    width: 80%;
+    margin: 3px 0px 0px 3px;
+    border: none;
+    resize: none;
+}
+.chat-view > .chat-write-form > .button-chat-send{
+    float: right;
+    width: 60px;
+    height: 61px;
+}
