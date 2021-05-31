@@ -2,19 +2,19 @@
 
 
 # 로컬 개발용
-spring:
-  config:
-    activate:
-      on-profile: local
+#spring:
+#  config:
+#    activate:
+#      on-profile: local
 
 api-gateway-url: http://localhost:8081
 
 ---
 
-# 운영서버 배포용
-spring:
-  config:
-    activate:
-      on-profile: prod
-
-api-gateway-url: http://13.124.17.116:8081
+## 운영서버 배포용
+#spring:
+#  config:
+#    activate:
+#      on-profile: prod
+#
+#api-gateway-url: http://13.124.17.116:8081
