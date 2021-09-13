@@ -71,3 +71,18 @@
     border: 1px solid lightgray;
 }
 
+#accordionSidebar{
+    z-index: 3;
+}
+
+#topNavbar{
+    z-index: 2;
+}
+
+#searchBar{
+    left: 20%;
+    width: 40%;
+    top: 18px;
+    position: absolute;
+}
+
