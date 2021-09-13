@@ -1,12 +1,13 @@
 /**
  * page history UX 개선용
  */
+/* 차후 삭제
 $(window).on('hashchange', function(){
     if(window.location.hash.slice(1,6) === "forum"){
         let forumId = window.location.hash.slice(7);
         switchFeed(forumId);
     }
-});
+});*/
 
 
 
@@ -19,6 +20,7 @@ const initData = {
     userData: "",
     forumData: "",
     postData: "",
+    userList: "",
 }
 
 
@@ -34,6 +36,21 @@ const userAjax = (prev) => {   // 유저정보 요청
         },
     }).done(function(data){
         initData.userData = data;    // data 저장
+    }).fail(function(xhr, status, errorThrown){
+        console.log(`ajax failed! ${xhr.status}: ${errorThrown}`);
+    });
+}
+
+const userListAjax = (prev) => {   // 유저리스트
+    console.log("사용자 리스트 조회");
+    return $.ajax({
+        url: `${window.API_GATEWAY_URI}/main/v1/group/users`,
+        type: 'GET',
+        xhrFields: {
+            withCredentials: true
+        },
+    }).done(function(data){
+        initData.userList = data.list;
     }).fail(function(xhr, status, errorThrown){
         console.log(`ajax failed! ${xhr.status}: ${errorThrown}`);
     });
@@ -259,9 +276,10 @@ const initAddEvent = () => {
 const initAjax = () => {    // 초기데이터 불러오고 화면그리는 function
     // forumAjax 응답받은 후 응답데이터 이용해 postAjax 요청
     // userAjax와, forumAjax->postAjax 모두 끝나면 랜더링동작, 이벤트부착동작 실
-    $.when(userAjax(), forumAjax().then(postAjax)).done(() => {
+    $.when(userAjax(),userListAjax(), forumAjax().then(postAjax)).done(() => {
         initDraw(); initAddEvent();
         window.location.hash = `forum/${initData.forumData.defaultForum.forumId}`;  // history UX용
+        setMentionList(initData.userList, '.comment-input');
     });
 }
 
@@ -372,3 +390,14 @@ const switchFeed = (param) => {
     });
 }
 
+const setMentionList = (data, target) => {
+    $(target).suggest('@', {
+        data: data,
+        map: function(user) {
+            return {
+                value: user.name,
+                text: '<strong>'+user.name+'</strong> <small>'+user.loginId+'</small>'
+            }
+        },
+    });
+}

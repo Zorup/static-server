@@ -329,7 +329,7 @@
 
 
     <!-- 채팅 뷰 -->
-    <div class="chat-view">
+ <!--   <div class="chat-view">
         <div class="chat-content">
             <ul>
                 <li class="nothing"></li>
@@ -340,18 +340,19 @@
             <input class="button-chat-send" type="button" value="보내기">
         </div>
     </div>
-
+-->
     <!-- 채팅목록 -->
-    <div id="chat-list" class="chat-list">
+ <!--   <div id="chat-list" class="chat-list">
         <ul>
             <li><div class="chat-list-top">채팅 목록</div></li>
             <li><div class="chat-list-bottom"></div></li>
         </ul>
     </div>
-
+-->
     <!-- 채팅 버튼 -->
+    <!--
     <input id="button-chat-list" class="button-chat-list" type="button" value="대화">
-    
+    -->
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
@@ -519,7 +520,7 @@
                                     <img class="rounded-circle" src="/img/undraw_profile.svg" width="40">
                                     <input class="current-post-id" name='postId' value="{{postId}}" style="display: none">
                                     <input class="current-forum-id" name='forumId' style="display: none">
-                                    <textarea name ='content' class="form-control ml-1 shadow-none textarea" placeholder="덧글을 입력하세요."></textarea>
+                                    <textarea name ='content' class="form-control ml-1 shadow-none textarea comment-input" placeholder="덧글을 입력하세요."></textarea>
                                 </div>
                                 <div class="mt-2 text-right">
                                     <input class="comment-write-submit btn btn-primary btn-sm shadow-none" type='button' value='Post comment'/>
@@ -580,7 +581,7 @@
                                 <img class="rounded-circle" src="/img/undraw_profile.svg" width="40">
                                 <input class="current-post-id" name='postId' value="{{postId}}" style="display: none">
                                 <input class="current-forum-id" name='forumId' style="display: none">
-                                <textarea name ='content' class="form-control ml-1 shadow-none textarea" placeholder="덧글을 입력하세요."></textarea>
+                                <textarea name ='content' class="form-control ml-1 shadow-none textarea comment-input" placeholder="덧글을 입력하세요."></textarea>
                             </div>
                             <div class="mt-2 text-right">
                                 <input class="comment-write-submit btn btn-primary btn-sm shadow-none" type='button' value='Post comment'/>
@@ -619,11 +620,12 @@
 
     <!-- Core plugin JavaScript-->
     <script src="/vendor/jquery-easing/jquery.easing.js"></script>
+    <script src="js/bootstrap-suggest.js"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="/js/sb-admin-2.js"></script>
     <script src="/js/temp.js"></script>
-    <script src="/js/chat.js"></script>
+<!--    <script src="/js/chat.js"></script> -->
 
 </body>
 
