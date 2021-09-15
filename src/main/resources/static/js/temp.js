@@ -27,6 +27,8 @@ const initData = {
     }
 }
 
+const pushTargetUsers = {}
+
 
 /**
  * ajax 요청들
@@ -177,6 +179,7 @@ const initDraw = () => {   // 초기데이터로 화면 그리는 function
     drawFeed(); // drawForum 보다 먼저 불려야함!
     drawUser();
     drawForum();
+    setMentionList(initData.userList, '.comment-input');
 }
 
 
@@ -297,7 +300,6 @@ const initAjax = () => {    // 초기데이터 불러오고 화면그리는 func
     $.when(userAjax(),userListAjax(), forumAjax().then(postAjax)).done(() => {
         initDraw(); initAddEvent();
         window.location.hash = `forum/${initData.forumData.defaultForum.forumId}`;  // history UX용
-        setMentionList(initData.userList, '.comment-input');
     });
 }
 
@@ -403,7 +405,7 @@ const switchFeed = (param) => {
         drawUser();
         putDefaultForumId(param);
         switchAddEvent();
-
+        setMentionList(initData.userList, '.comment-input');
         window.location.hash = `forum/${param}`;    // history UX용
     });
 }
