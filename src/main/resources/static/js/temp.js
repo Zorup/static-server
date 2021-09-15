@@ -416,8 +416,18 @@ const setMentionList = (data, target) => {
         map: function(user) {
             return {
                 value: user.name,
-                text: '<strong>'+user.name+'</strong> <small>'+user.loginId+'</small>'
+                text: '<strong>'+user.name+'</strong> <small>'+user.loginId+'</small> <small hidden>'+user.userId+'</small>'
             }
         },
+        onselect: function (e, item){
+            const userId = item.text.split(" ")[2];
+            const currentPostId = e.$element.parent().children('.current-post-id').val();
+            if(!pushTargetUsers.hasOwnProperty(currentPostId)) {
+                pushTargetUsers[currentPostId] = new Set();
+            }
+            if(!pushTargetUsers[currentPostId].has(userId)) {
+                pushTargetUsers[currentPostId].add(userId);
+            }
+        }
     });
 }
