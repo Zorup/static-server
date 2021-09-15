@@ -19,7 +19,7 @@ messaging.requestPermission()
         return messaging.getToken();
     })
     .then(async function(token) {
-        console.log(token)
+        initData.pushToken = token;
         // 포그라운드 상태에서 FCM을 통해 메시지 전송이 온 경우 이를 수신한다.
         // 서버쪽에서는 토큰기반으로 메시지를 전송 java code에서 보낸 eventmap이 payload.data로 받아짐.
         messaging.onMessage(payload => {

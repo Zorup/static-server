@@ -101,7 +101,7 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow position-fixed w-100" id="topNavbar">
+                <nav class="navbar navbar-expand navbar-light navbar-fixed-top  bg-white topbar mb-4 static-top shadow position-fixed w-100" id="topNavbar">
 
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -622,17 +622,23 @@
     <script src="/vendor/jquery-easing/jquery.easing.js"></script>
     <script src="js/bootstrap-suggest.js"></script>
 
+    <!-- Custom scripts for all pages-->
+    <script src="/js/sb-admin-2.js"></script>
+    <script src="/js/temp.js"></script>
+    <script src="/js/chat.js"></script>
+
     <!-- firebase plugin JavaScript -->
     <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-messaging.js"></script>
     <script src="js/firebase-app-init.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="/js/sb-admin-2.js"></script>
-    <script src="/js/temp.js"></script>
-    <script src="/js/chat.js"></script>
-
+    <script>
+        //순서보장이 되는 건가?
+        window.onload = function (){
+            setUserPushToken(initData.userData.data.userId, initData.token);
+        }
+    </script>
 </body>
 
 </html>
