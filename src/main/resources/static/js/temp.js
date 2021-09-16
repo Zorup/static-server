@@ -120,6 +120,20 @@ const setUserPushToken = (userId, token) => {
     });
 }
 
+const sendPushNotification = (userId, token) => {
+    return $.ajax({
+        url: `${window.API_GATEWAY_URI}/main/v1/user/${userId}?push-token=${token}`,
+        type: 'PATCH',
+        xhrFields: {
+            withCredentials: true
+        },
+    }).done(function(data){
+        alert("FCM TOKEN INIT Success")
+    }).fail(function(xhr, status, errorThrown){
+        console.log(`ajax failed! ${xhr.status}: ${errorThrown}`);
+    });
+}
+
 /**
  * 초기 랜더링 로직들
  */
@@ -420,14 +434,56 @@ const setMentionList = (data, target) => {
             }
         },
         onselect: function (e, item){
-            const userId = item.text.split(" ")[2];
+            const userInfoArr = item.text.split(" ");
+            const userId = Number.parseInt(userInfoArr[2]);
             const currentPostId = e.$element.parent().children('.current-post-id').val();
+
             if(!pushTargetUsers.hasOwnProperty(currentPostId)) {
-                pushTargetUsers[currentPostId] = new Set();
+                pushTargetUsers[currentPostId] = new DeepUserInfoSet();
             }
             if(!pushTargetUsers[currentPostId].has(userId)) {
-                pushTargetUsers[currentPostId].add(userId);
+                pushTargetUsers[currentPostId].add(new UserInformation(userId, userInfoArr[0]));
             }
         }
     });
+}
+
+/**
+ * 사용 자료 구조 정의
+ * */
+
+class UserInformation{
+    constructor(userId, userName){
+        if(!Number.isInteger(userId)){
+            throw new Error("UserPk must be integer");
+        }
+        if(typeof userName !== 'string'){
+            throw new Error("UserName must be string");
+        }
+        this.userId = userId;
+        this.userName = userName;
+    }
+}
+
+class DeepUserInfoSet extends Set {
+    add (o) {
+        for (let i of this)
+            if (this.deepCompare(o, i))
+                return this;
+        super.add.call(this, o);
+        return this;
+    };
+
+    has(userId){
+        for(let i of this){
+            if(userId === i.userId){
+                return true;
+            }
+        }
+        return false;
+    };
+
+    deepCompare(o, i) {
+        return o.userId === i.userId;
+    };
 }
