@@ -1,17 +1,4 @@
 /**
- * page history UX 개선용
- */
-/* 차후 삭제
-$(window).on('hashchange', function(){
-    if(window.location.hash.slice(1,6) === "forum"){
-        let forumId = window.location.hash.slice(7);
-        switchFeed(forumId);
-    }
-});*/
-
-
-
-/**
  * 전역 변수들
  */
 let deleteForumList = [];
@@ -120,15 +107,15 @@ const setUserPushToken = (userId, token) => {
     });
 }
 
-const sendPushNotification = (userId, token) => {
+const sendPushNotification = (param) => {
     return $.ajax({
-        url: `${window.API_GATEWAY_URI}/main/v1/user/${userId}?push-token=${token}`,
-        type: 'PATCH',
+        url: `${window.API_GATEWAY_URI}/fcm/v1/fcm-msg`,
+        type: 'POST',
+        contentType : 'application/json;charset=UTF-8',
+        data: JSON.stringify(param),
         xhrFields: {
             withCredentials: true
         },
-    }).done(function(data){
-        alert("FCM TOKEN INIT Success")
     }).fail(function(xhr, status, errorThrown){
         console.log(`ajax failed! ${xhr.status}: ${errorThrown}`);
     });
@@ -292,8 +279,16 @@ const commentCreateEvent = () => {
                 let template = Handlebars.compile(source);
                 result = template(wrapper.data);
                 container.innerHTML = result;
-
+                setMentionList(initData.userList, '.comment-input');
                 switchAddEvent();   // 포럼전환 후 사용하는 모듈 재활용
+
+                //해당 덧글이 멘션을 포함하는 덧글이라면 추가적으로 push메시지를 쏨.
+                if(pushTargetUsers.hasOwnProperty(currentPostId)) {
+                    let pushRequestData = getNotiRequestData(currentPostId, true);
+                    console.log(pushRequestData);
+                    sendPushNotification(pushRequestData);
+                    delete pushTargetUsers[currentPostId];
+                }
             });
         }).fail(function(xhr, status, errorThrown){
             console.log(`ajax failed! ${xhr.status}: ${errorThrown}`);
@@ -313,15 +308,12 @@ const initAjax = () => {    // 초기데이터 불러오고 화면그리는 func
     // userAjax와, forumAjax->postAjax 모두 끝나면 랜더링동작, 이벤트부착동작 실
     $.when(userAjax(),userListAjax(), forumAjax().then(postAjax)).done(() => {
         initDraw(); initAddEvent();
+        initData.sender = new UserInformation(initData.userData.data.userId, initData.userData.data.name);
         window.location.hash = `forum/${initData.forumData.defaultForum.forumId}`;  // history UX용
     });
 }
 
 initAjax();
-
-
-
-
 
 /**
  * 버튼동작들
@@ -487,3 +479,18 @@ class DeepUserInfoSet extends Set {
         return o.userId === i.userId;
     };
 }
+
+//채팅, mention에서 공통적으로 사용
+const getNotiRequestData = (currentTargetId, eventType) => {
+    let pushRequestData = {
+        "sender": initData.sender,
+        "receivers":[],
+        "eventType": eventType
+    };
+    if(eventType === true) {
+        pushTargetUsers[currentTargetId].forEach(v => {
+            pushRequestData.receivers.push(v);
+        });
+    }
+    return pushRequestData;
+};
