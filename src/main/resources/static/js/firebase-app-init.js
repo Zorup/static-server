@@ -13,19 +13,10 @@ firebase.initializeApp(firebaseConfig);
 // 메시지 기능 활성화
 const messaging = firebase.messaging();
 // RequestPermission 첫 어플 시작 시 알림 허용 or 불허를 사용자가 선택하도록 한다.
-messaging.requestPermission()
-    .then(function() {
-        //앱 연결 시 사용자 기기별 고유한 token값을 준다.
-        return messaging.getToken();
-    })
-    .then(async function(token) {
-        initData.pushToken = token;
-        // 포그라운드 상태에서 FCM을 통해 메시지 전송이 온 경우 이를 수신한다.
-        // 서버쪽에서는 토큰기반으로 메시지를 전송 java code에서 보낸 eventmap이 payload.data로 받아짐.
-        messaging.onMessage(payload => {
-            console.log(payload.data);
-        })
-    })
+messaging.onMessage(payload => {
+    console.log(payload.data);
+})
+
 /*
 * TODO
 * 1. 개별 사용자 엔티티에 push_token을 저장하는 API 만든 후 push 토큰 저장.

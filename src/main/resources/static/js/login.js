@@ -12,12 +12,19 @@ function signIn(){
         xhrFields: {
             withCredentials: true
         }
-    }).done(function(){
-        location.href = "/template";
+    }).done(function(response){
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+        messaging.requestPermission()
+            .then(function() {
+                return messaging.getToken();
+            })
+            .then(async function(token) {
+                setUserPushToken(response.data ,token);
+            })
     }).fail(function(){
         alert("유효하지 않은 접근입니다. 아이디나 비밀번호를 확인해주세요.");
     });
-
 }
 
 function movRegisterPage(){
@@ -27,3 +34,27 @@ function movRegisterPage(){
 function movForgot(){
     location.href="/forgot"
 }
+
+const setUserPushToken = (userId, token) => {
+    return $.ajax({
+        url: `${window.API_GATEWAY_URI}/main/v1/user/${userId}?push-token=${token}`,
+        type: 'PATCH',
+        xhrFields: {
+            withCredentials: true
+        },
+    }).done(function(data){
+        location.href = "/template";
+    }).fail(function(xhr, status, errorThrown){
+        console.log(`ajax failed! ${xhr.status}: ${errorThrown}`);
+    });
+}
+
+let firebaseConfig = {
+    apiKey: "AIzaSyDcO66arFwaWHVYAWpGciqGGQV9cOGJM2Q",
+    authDomain: "alarm-1830c.firebaseapp.com",
+    projectId: "alarm-1830c",
+    storageBucket: "alarm-1830c.appspot.com",
+    messagingSenderId: "831418413127",
+    appId: "1:831418413127:web:d4fc457e510db7556cc162",
+    measurementId: "G-6YP6W2WJ89"
+};

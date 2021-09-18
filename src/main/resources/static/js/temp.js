@@ -93,20 +93,6 @@ const onePostAjax = (pid, wrapper) => {  // 특정 포스트 정보 요청 (댓�
     });
 }
 
-const setUserPushToken = (userId, token) => {
-    return $.ajax({
-        url: `${window.API_GATEWAY_URI}/main/v1/user/${userId}?push-token=${token}`,
-        type: 'PATCH',
-        xhrFields: {
-            withCredentials: true
-        },
-    }).done(function(data){
-        alert("FCM TOKEN INIT Success")
-    }).fail(function(xhr, status, errorThrown){
-        console.log(`ajax failed! ${xhr.status}: ${errorThrown}`);
-    });
-}
-
 const sendPushNotification = (param) => {
     return $.ajax({
         url: `${window.API_GATEWAY_URI}/fcm/v1/fcm-msg`,
@@ -359,7 +345,7 @@ const deleteForum = () => {
 
 const logout = () => {
     $.ajax({
-        url: `${window.API_GATEWAY_URI}/main/v1/logout`,
+        url: `${window.API_GATEWAY_URI}/main/v1/logout/user/${initData.userData.data.userId}`,
         type: 'POST',
         xhrFields: {
             withCredentials: true
