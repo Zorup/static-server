@@ -79,10 +79,32 @@
     z-index: 2;
 }
 
-#searchBar{
-    left: 20%;
+.searchBar{
+    margin-left: 200px;
     width: 40%;
     top: 18px;
     position: absolute;
 }
 
+.mainFeed{
+    margin-left: 200px;
+    margin-top: 100px;
+}
+
+@media (max-width: 768px) {
+    .searchBar {
+        margin-left: 110px;
+        width: 40%;
+        top: 18px;
+        position: absolute;
+    }
+
+    .mainFeed {
+        margin-left: 110px;
+        margin-top: 100px;
+    }
+}
+
+.feed {
+    min-width: 540px;
+}

@@ -111,7 +111,7 @@
                     <!-- Topbar Search -->
                     <form
                             class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group" id="searchBar">
+                        <div class="input-group searchBar">
                             <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
                                    aria-label="Search" aria-describedby="basic-addon2">
                             <div class="input-group-append">
@@ -303,7 +303,7 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid mainFeed">
                     <!-- 피드 들어올 자리 -->
                 </div>
                 <!-- /.container-fluid -->
@@ -451,7 +451,7 @@
         <!-- 게시글 생성 -->
         <div class="container">
             <div class="d-flex  row">
-                <div class="col-md-7">
+                <div class="col-md-7 feed">
                     <div class="d-flex flex-column comment-section">
                         <div class="bg-white p-2">
                             <div class="d-flex flex-row user-info"><img class="rounded-circle" src="/img/undraw_profile.svg" width="30" height="30">
@@ -477,7 +477,7 @@
         {{#each postList}}
         <div class="container">
             <div class="d-flex  row">
-                <div class="col-md-7">
+                <div class="col-md-7 feed">
                     <div class="d-flex flex-column comment-section">
                         <div class="bg-white p-2">
                             <div class="d-flex flex-row user-info"><img class="rounded-circle" src="/img/undraw_profile.svg" width="60" height="60">
