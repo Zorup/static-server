@@ -345,7 +345,7 @@ const deleteForum = () => {
 
 const logout = () => {
     $.ajax({
-        url: `${window.API_GATEWAY_URI}/main/v1/logout/user/${initData.userData.data.userId}`,
+        url: `${window.API_GATEWAY_URI}/auth/v1/logout/user/${initData.userData.data.userId}`,
         type: 'POST',
         xhrFields: {
             withCredentials: true

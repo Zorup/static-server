@@ -3,12 +3,13 @@ function signIn(){
     let userPwd = $('#InputPassword').val();
 
     $.ajax({
-        url: `${window.API_GATEWAY_URI}/main/v1/login`,
+        url: `${window.API_GATEWAY_URI}/auth/v1/login`,
         type: 'POST',
-        data: {
+        data: JSON.stringify({
             loginId: userId,
             password: userPwd
-        },
+        }),
+        contentType: 'application/json; charset=UTF-8',
         xhrFields: {
             withCredentials: true
         }
@@ -20,7 +21,7 @@ function signIn(){
                 return messaging.getToken();
             })
             .then(async function(token) {
-                setUserPushToken(response.data ,token);
+                setUserPushToken(response.data.userId ,token);
             })
     }).fail(function(){
         alert("유효하지 않은 접근입니다. 아이디나 비밀번호를 확인해주세요.");
