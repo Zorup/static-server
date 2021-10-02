@@ -38,7 +38,7 @@ function movForgot(){
 
 const setUserPushToken = (userId, token) => {
     return $.ajax({
-        url: `${window.API_GATEWAY_URI}/main/v1/user/${userId}?push-token=${token}`,
+        url: `${window.API_GATEWAY_URI}/fcm/v1/user/${userId}?push-token=${token}`,
         type: 'PATCH',
         xhrFields: {
             withCredentials: true
